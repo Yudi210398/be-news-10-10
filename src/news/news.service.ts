@@ -8,4 +8,8 @@ export class NewsService {
   async getDataNEws() {
     return await this.prisma.news.findMany();
   }
+
+  async getDataNewsId(id: number) {
+    return await this.prisma.news.findMany({ where: { id: id } });
+  }
 }
