@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaPostgreService } from 'src/prisma-postgre/prisma-postgre.service';
 
 @Injectable()
@@ -10,6 +10,24 @@ export class NewsService {
   }
 
   async getDataNewsId(id: number) {
-    return await this.prisma.news.findMany({ where: { id: id } });
+    const datas = await this.prisma.news.findMany({ where: { id: id } });
+    if (datas.length === 0)
+      throw new HttpException('Data Tidak Ada', HttpStatus.CONFLICT);
+    return datas;
+  }
+
+  async getDataYear() {
+    const hasilDate = await this.prisma.news.findMany({
+      select: { date: true },
+    });
+
+    const loops = hasilDate.map((result) => {
+      const breakss = result.date.toString().split(' ');
+      return breakss[3];
+    });
+
+    const sort = loops.sort((a, b) => +b - +a);
+
+    return sort;
   }
 }

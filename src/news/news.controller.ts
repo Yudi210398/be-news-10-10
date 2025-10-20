@@ -10,6 +10,11 @@ export class NewsController {
     return await this.newsService.getDataNEws();
   }
 
+  @Get('year')
+  async getNewsortYear() {
+    return await this.newsService.getDataYear();
+  }
+
   @Get(':id')
   async getNewsid(@Param('id', ParseIntPipe) id: number | number) {
     console.log(id, `caks`);
